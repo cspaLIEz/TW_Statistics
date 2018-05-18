@@ -3,29 +3,68 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-            <shrinkable-menu 
+        <div class="sidebar-menu-con" style="width:320px;background:rgb(73, 80, 96)">
+            <!-- <shrinkable-menu 
                 :shrink="shrink"
                 @on-change="handleSubmenuChange"
                 :theme="menuTheme" 
                 :before-push="beforePush"
                 :open-names="openedSubmenuArr"
                 :menu-list="menuList">
+                
+            </shrinkable-menu> -->
+            <div >
                 <div slot="top" class="logo-con">
-                    贪玩岛
+                        贪玩岛
                 </div>
-            </shrinkable-menu>
+                <div class="main_lbox">
+                    <div class="box_top">
+                        <span class="lspan">今天</span><span class="rspan">{{dateDA}}</span>
+                    </div>
+                    <p class="two_p">本月交易数据</p>
+                    <ul>
+                        <li>
+                            <p class="left_p">成交件数</p>
+                            <p class="right_p">{{ldata}}件</p>
+                        </li>
+                        <li>
+                            <p class="left_p">交易人数</p>
+                            <p class="right_p">{{ldata}}人</p>
+                        </li>
+                        <li>
+                            <p class="left_p">交易额</p>
+                            <p class="right_p">￥{{ldata}}</p>
+                        </li>
+                        <li>
+                            <p class="left_p">采购市场价</p>
+                            <p class="right_p">￥{{ldata}}</p>
+                        </li>
+                        <li>
+                            <p class="left_p">交易利润</p>
+                            <p class="right_p">￥{{ldata}}</p>
+                        </li>
+                        <div class="bottom_l">
+                            <p class="left_p">分成金额</p>
+                            <p class="right_p">￥{{ldata}}</p>
+                        </div>   
+                    </ul>
+                    
+                </div>
+            </div>
+            
+
         </div>
-        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
+        <div class="main-header-con" style="paddingLeft:320px">
             <div class="main-header">
-                <div class="navicon-con">
-                    <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
+                <!--<div class="navicon-con">
+                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
                         <Icon type="navicon" size="32"></Icon>
-                    </Button>
-                </div>
+                    </Button> 
+                </div>-->
                 <div class="header-middle-con">
                     <div class="main-breadcrumb">
-                        <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
+                        <!-- <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav> -->
+                        统计后台
                     </div>
                 </div>
                 <div class="header-avator-con">
@@ -51,16 +90,57 @@
                     </div>
                 </div>
             </div>
-            <div class="tags-con">
+            <!-- <div class="tags-con">
                 <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
-            </div>
+            </div> -->
         </div>
-        <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
-            <div class="single-page">
+        <div class="single-page-con" style="left:320px">
+            <div class="right_box">
+                <div class="right_top">
+                        <Form :label-width="80">
+                        <div class="floatL">  
+                            <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
+                            <Button class="month_a"  :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
+                        </div>
+                        <div class="floatL"  style="margin-top:10px">
+                            <FormItem label="起始时间">
+                                <DatePicker type="date" placeholder="Select date" style="width: 220px"></DatePicker>
+                            </FormItem>
+                        </div>
+                        <div class="floatL"  style="margin-top:10px">
+                            <FormItem label="终止时间">
+                                <DatePicker type="date" placeholder="Select date" style="width: 220px"></DatePicker>
+                            </FormItem>
+                        </div>    
+                    </Form>    
+                    <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+                </div>
+                <div style="clear:both"></div>
+                <div class="right_bottom">
+                    <Table stripe :columns="theone?columnst:columnstd" :data="theone?tableDatat:tableDatatd"></Table>
+                </div>
+                <div class="next_box">
+                    <Page :total="totaldata" :current="currentdata" @on-change="changePage" :page-size="pagesizedata" show-elevator show-total show-sizer></Page>
+                </div>
+                <div class="footer">
+                    <span>2018.5.3-2018.6.3</span>
+                    <span>数据合计：成交件数{{ldata}}件</span>
+                    <span>交易人数{{ldata}}人</span>
+                    <span>交易额￥{{ldata}}</span>
+
+                    <span>采购市场价￥{{ldata}}</span>
+
+                    <span>交易利润￥{{ldata}}</span>
+                    <span style="color: #ff0000;">分成金额￥{{ldata}}</span>
+                    <Button style="border-radius:0;">导出为excel</Button>
+                </div>
+                
+            </div>
+            <!-- <div class="single-page">
                 <keep-alive :include="cachePage">
                     <router-view></router-view>
                 </keep-alive>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -87,10 +167,67 @@
         },
         data () {
             return {
+                totaldata:50,
+                currentdata:1,
+                pagesizedata:20,
+                ldata:'100',
                 shrink: false,
                 userName: '',
                 isFullScreen: false,
-                openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+                openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
+                theone:true,
+                columnst:[{
+                    title:"用户手机号",
+                    key:'phone'
+                },{
+                    title:"饰品",
+                    key:'phone'
+                },{
+                    title:"成交时间",
+                    key:'phone'
+                },{
+                    title:"成交金额",
+                    key:'phone'
+                },{
+                    title:"采购市场价",
+                    key:'phone'
+                },{
+                    title:"交易利润",
+                    key:'phone'
+                },{
+                    title:"分成金额",
+                    key:'phone'
+                },{
+                    title:"用户ID",
+                    key:'phone'
+                }],
+                tableDatat:[{
+                    phone:1
+                }],
+                tableDatatd:[{
+                    phone:2
+                }],
+                columnstd:[{
+                    title:"月份",
+                    key:'phone'
+                },{
+                    title:"成交件数",
+                    key:'phone'
+                },{
+                    title:"交易人数",
+                    key:'phone'
+                },{
+                    title:"交易额",
+                    key:'phone'
+                },{
+                    title:"交易利润",
+                    key:'phone'
+                },{
+                    title:"分成金额",
+                    key:'phone',
+                    style:{"color":"red"}
+                }],
+                dateDA:''
             };
         },
         computed: {
@@ -120,6 +257,9 @@
             }
         },
         methods: {
+            changePage(){
+
+            },
             init () {
                 let pathArr = util.setCurrentPath(this, this.$route.name);
                 this.$store.commit('updateMenulist');
@@ -174,6 +314,14 @@
             },
             fullscreenChange (isFullScreen) {
                 // console.log(isFullScreen);
+            },
+            changetheone(e){
+                this.theone=e
+            },
+            getdate(){
+                let obj=new Date()
+            this.dateDA=obj.getFullYear()+"."+obj.getMonth()+"."+obj.getDate()
+                
             }
         },
         watch: {
@@ -200,10 +348,12 @@
         },
         mounted () {
             this.init();
+            
         },
         created () {
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
+            this.getdate()
         }
     };
 </script>
