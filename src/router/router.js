@@ -44,17 +44,17 @@ export const preview = {
 };
 
 // 节目制作
-export const build = {
-    path: '/build',
-    name: 'build',
-    component: () => import('@/views/build/index.vue')
-};
+// export const build = {
+//     path: '/build',
+//     name: 'build',
+//     component: () => import('@/views/build/index.vue')
+// };
 // 节目制作预览
-export const buildpreview = {
-    path: '/buildpreview',
-    name: 'buildpreview',
-    component: () => import('@/views/build/preview.vue')
-};
+// export const buildpreview = {
+//     path: '/buildpreview',
+//     name: 'buildpreview',
+//     component: () => import('@/views/build/preview.vue')
+// };
 
 export const locking = {
     path: '/locking',
@@ -87,7 +87,7 @@ export const appRouter = [
             { path: '/home', title: '全局开关', name: 'home_index', icon: 'power', component: () => import('@/views/main/switch/switch.vue') }
         ]
     },
-    {
+    /*{
         path: '/program',
         icon: 'ios-paper',
         name: 'program',
@@ -135,7 +135,7 @@ export const appRouter = [
             // { path: 'template', title: '模板', name: 'resources_template', icon:'document-text', component: () => import('@/views/resources/template/template.vue') }
         ]
     }
-    /*{
+    {
         path: '/journal',
         icon: 'ios-paper-outline',
         name: 'journal',
@@ -165,9 +165,9 @@ export const appRouter = [
 export const routers = [
     loginRouter,
     otherRouter,
-    preview,
-    build,
-    buildpreview,
+    // preview,
+    // build,
+    // buildpreview,
     locking,
     ...appRouter,
     page500,

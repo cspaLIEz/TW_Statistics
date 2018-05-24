@@ -37,7 +37,7 @@
                             <p class="right_p">￥{{alldata.totalAmount}}</p>
                         </li>
                         <li>
-                            <p class="left_p">采购市场价</p>
+                            <p class="left_p">市场价</p>
                             <p class="right_p">￥{{alldata.totalCost}}</p>
                         </li>
                         <li>
@@ -71,7 +71,7 @@
                 <div class="header-avator-con">
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
+                    <!-- <message-tip v-model="mesCount"></message-tip> -->
                     <theme-switch></theme-switch>
 
                     <div class="user-dropdown-menu-con">
@@ -97,31 +97,55 @@
         <div class="single-page-con" style="left:320px">
             <div class="right_box">
                 <div class="right_top">
-                    <Form :label-width="80">
+                    
                         <div class="floatL">
                             <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
                             <Button class="month_a" :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
                         </div>
-                        <div class="floatL" style="margin-top:10px">
-                            <FormItem label="起始时间">
-                                <DatePicker format="yyyy.MM.dd" type="date" placeholder="Select date" style="width: 220px"></DatePicker>
-                            </FormItem>
+                        <Form :label-width="80">
+                        <div v-if="theone">
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="起始时间">
+                                    <DatePicker v-model="adate" format="yyyy.MM.dd" @on-change="onechanges" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="终止时间">
+                                    <DatePicker v-model="bdate" format="yyyy.MM.dd" @on-change="onechangee" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                    <Button type="error" @click="changedatelist" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+
                         </div>
-                        <div class="floatL" style="margin-top:10px">
-                            <FormItem label="终止时间">
-                                <DatePicker format="yyyy.MM.dd" type="date" placeholder="Select date" style="width: 220px"></DatePicker>
-                            </FormItem>
-                        </div>
-                    </Form>
+                        </Form> 
+                        <Form :label-width="80">
+                        <div v-if="!theone">
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="起始月份">
+                                    <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="终止月份">
+                                    <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
                     <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+                            
+                        </div>
+                    </Form>    
                 </div>
                 <div style="clear:both"></div>
                 <div class="right_bottom">
 
                     <Table border stripe :columns="theone?columnst:columnstd" :data="theone?tableDatat:tableDatatd"></Table>
                 </div>
-                <div class="next_box">
-                    <Page :total="totaldata" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata" show-elevator show-total
+                <div class="next_box" v-if="theone">
+                    <Page transfer :total="totaldata" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata" show-elevator show-total
+                        show-sizer></Page>
+                </div>
+                <div class="next_box" v-if="!theone">
+                    <Page transfer :total="total1data" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata" show-elevator show-total
                         show-sizer></Page>
                 </div>
                 <div class="footer">
@@ -173,7 +197,11 @@
         },
         data() {
             return {
+                adate:'',
+                bdate:'',
                 date_se:'',
+                onchans:'',
+                onchane:'',
                 alldata: {
                     
                     itemTotalCount: 4,
@@ -258,17 +286,7 @@
                     title: "用户Ip",
                     key: 'ipAddress'
                 }],
-                tableDatat: [{
-                    ipAddress: "",
-                    phoneNumber: "",
-                    imgUrl: "",
-                    marketName: "",
-                    completedAt: "",
-                    bidPrice: '',
-                    marketPrice: '',
-                    profit: 0,
-                    sharing: 0
-                }],
+                tableDatat: [],
                 tableDatatd: [{
                     phone: 2
                 }],
@@ -399,9 +417,12 @@
                 let dd = new Date()
                 dd.setDate(obj.getDate() + 1)
                 this.dateDA = aa
+                this.adate = aa
+                this.bdate = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
                 this.startDate = aa
                 this.endDate = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
-
+                this.onchans = aa
+                this.onchane =dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
             },
             getlist() {
                 let aa = {
@@ -409,8 +430,8 @@
                     pageIndex: this.currentdata,
                     // endDate: "2018.5.24",
                     // startDate: "2018.5.22",
-                    endDate: this.startDate,
-                    startDate: this.endDate
+                    startDate: this.startDate,
+                    endDate: this.endDate
                 }
                 // console.log(aa)
                 let url = "http://localhost:5001"
@@ -437,11 +458,16 @@
                 //     console.log(res)
                 // })
             },
-            onechanges(){
-                
+            onechanges(e){
+                this.onchans=e
             },
-            onechangee(){
-
+            onechangee(e){
+                this.onchane=e
+            },
+            changedatelist(){
+                this.startDate = this.onchans
+                this.endDate = this.onchane
+                this.getlist()
             }
         },
         watch: {

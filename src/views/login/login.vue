@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-con">
                     <div class="form-con-header">
-                        贪玩岛后台管理系统
+                        贪玩岛统计后台
                     </div>
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
