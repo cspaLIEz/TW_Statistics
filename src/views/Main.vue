@@ -36,7 +36,7 @@
                             <p class="right_p">￥{{ldata}}</p>
                         </li>
                         <li>
-                            <p class="left_p">采购市场价</p>
+                            <p class="left_p">市场价</p>
                             <p class="right_p">￥{{ldata}}</p>
                         </li>
                         <li>
@@ -70,7 +70,7 @@
                 <div class="header-avator-con">
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
+                    <!-- <message-tip v-model="mesCount"></message-tip> -->
                     <theme-switch></theme-switch>
                     
                     <div class="user-dropdown-menu-con">
@@ -81,7 +81,6 @@
                                     <Icon type="arrow-down-b"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem name="ownSpace">个人中心</DropdownItem>
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -102,16 +101,31 @@
                             <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
                             <Button class="month_a"  :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
                         </div>
-                        <div class="floatL"  style="margin-top:10px">
-                            <FormItem label="起始时间">
-                                <DatePicker type="date" placeholder="Select date" style="width: 220px"></DatePicker>
-                            </FormItem>
+                        <div v-if="theone">
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="起始时间">
+                                    <DatePicker type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="终止时间">
+                                    <DatePicker type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
                         </div>
-                        <div class="floatL"  style="margin-top:10px">
-                            <FormItem label="终止时间">
-                                <DatePicker type="date" placeholder="Select date" style="width: 220px"></DatePicker>
-                            </FormItem>
-                        </div>    
+                        <div v-if="!theone">
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="起始月份">
+                                    <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                            <div class="floatL"  style="margin-top:10px">
+                                <FormItem label="终止月份">
+                                    <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
+                                </FormItem>
+                            </div>
+                            
+                        </div>
                     </Form>    
                     <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
                 </div>
@@ -189,7 +203,7 @@
                     title:"成交金额",
                     key:'phone'
                 },{
-                    title:"采购市场价",
+                    title:"市场价",
                     key:'phone'
                 },{
                     title:"交易利润",
@@ -203,10 +217,36 @@
                 }],
                 tableDatat:[{
                     phone:1
+                },{
+                    phone:2
+                },{
+                    phone:3
+                },{
+                    phone:1
+                },{
+                    phone:1
+                },{
+                    phone:2
+                },{
+                    phone:3
+                },{
+                    phone:1
                 }],
                 tableDatatd:[{
-                    phone:2
-                }],
+                    phone:28
+                },{
+                    phone:27
+                },{
+                    phone:36
+                },{
+                    phone:21
+                },{
+                    phone:22
+                },{
+                    phone:24
+                },{
+                    phone:25
+                },],
                 columnstd:[{
                     title:"月份",
                     key:'phone'
@@ -320,7 +360,7 @@
             },
             getdate(){
                 let obj=new Date()
-            this.dateDA=obj.getFullYear()+"."+obj.getMonth()+"."+obj.getDate()
+            this.dateDA=obj.getFullYear()+"."+(obj.getMonth()+1)+"."+obj.getDate()
                 
             }
         },
