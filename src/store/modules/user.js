@@ -4,7 +4,8 @@ const user = {
     namespaced: true,
     state: {
         user:'',
-        userId:''
+        userId:'',
+        token:'',
     },
     mutations: {
         logout (state, vm) {
@@ -12,6 +13,7 @@ const user = {
             Cookies.remove('userId');
             Cookies.remove('password');
             Cookies.remove('access');
+            Cookies.remove('token');
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');
             themeLink.setAttribute('href', '');
@@ -28,8 +30,10 @@ const user = {
         login (state, data) {
             state.user = data.user;
             state.userId = data.userId;
+            state.token = data.token;
             Cookies.set('user', data.user);
             Cookies.set('userId', data.userId);
+            Cookies.set('token', data.token);
         }
     }
 };

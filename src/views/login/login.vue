@@ -113,34 +113,40 @@ export default {
         },
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
-                // if (valid) {
+                if (valid) {
                     var data = {
-                        username:this.form.userName,
+                        userName:this.form.userName,
                         password:this.form.password
                     }
                     
-                    // Login(data).then(function(res){
-                        /*if(res.status===0){
+                    Login(data).then(function(res){
+                        // console.log(res.access_token)
+                        // if(res.status===0){
                             this.$Message.success("登录成功");
                             this.$store.commit('user/login', {
                                 user:this.form.userName,
-                                userId:res.data.userId
+                                token:res.access_token
+                                // userId:res.data.userId
                             });
-                            Cookies.set('user', this.form.userName);
-                            Cookies.set('password', this.form.password);
+                            localStorage.setItem('token', res.access_token)
+                            // this.$store.commit("token",res.access_token)
+                            // Cookies.set('user', this.form.userName);
+                            // Cookies.set('password', this.form.password);
                             this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                            if (this.form.userName === 'admin') {
-                                Cookies.set('access', 0);
-                            } else {
-                                Cookies.set('access', 1);
-                            }
+                            // if (this.form.userName === 'admin') {
+                            //     Cookies.set('access', 0);
+                            // } else {
+                            //     Cookies.set('access', 1);
+                            // }
                             this.$router.push({
                                 name: 'home_index'
                             });
-                        } else {
-                            this.$Message.error("登录失败");
-                        }*/
-                        this.$store.commit('user/login', {
+                        // } else {
+                        //     this.$Message.error("登录失败");
+                        // }
+
+
+                        /*this.$store.commit('user/login', {
                                 user:this.form.userName,
                                 userId:"YH0001"
                         });
@@ -150,9 +156,10 @@ export default {
                         Cookies.set('access', 0);
                         this.$router.push({
                                 name: 'global_switch'
-                            });    
-                    // }.bind(this));
-                // }
+                            });*/
+
+                    }.bind(this));
+                }
             });
         }
     }
