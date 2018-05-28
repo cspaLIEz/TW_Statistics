@@ -128,7 +128,8 @@ export default {
                                 token:res.access_token
                                 // userId:res.data.userId
                             });
-                            localStorage.setItem('token', res.access_token)
+                            localStorage.setItem('token',res.data.access_token)
+                            
                             // this.$store.commit("token",res.access_token)
                             // Cookies.set('user', this.form.userName);
                             // Cookies.set('password', this.form.password);

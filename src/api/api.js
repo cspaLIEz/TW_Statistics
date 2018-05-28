@@ -1,5 +1,4 @@
 import axios from '@/libs/axios';
-import queryString from 'querystring'
 
 export const Login = data => axios.post('/api/Auth/Login', data);
 

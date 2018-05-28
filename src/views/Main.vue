@@ -97,43 +97,43 @@
         <div class="single-page-con" style="left:320px">
             <div class="right_box">
                 <div class="right_top">
-                    
-                        <div class="floatL">
-                            <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
-                            <Button class="month_a" :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
-                        </div>
-                        <Form :label-width="80">
+
+                    <div class="floatL">
+                        <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
+                        <Button class="month_a" :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
+                    </div>
+                    <Form :label-width="80">
                         <div v-if="theone">
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="起始时间">
                                     <DatePicker v-model="adate" format="yyyy.MM.dd" @on-change="onechanges" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="终止时间">
                                     <DatePicker v-model="bdate" format="yyyy.MM.dd" @on-change="onechangee" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                    <Button type="error" @click="changedatelist" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+                            <Button type="error" @click="changedatelist" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
 
                         </div>
-                        </Form> 
-                        <Form :label-width="80">
+                    </Form>
+                    <Form :label-width="80">
                         <div v-if="!theone">
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="起始月份">
                                     <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="终止月份">
                                     <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                    <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
-                            
+                            <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+
                         </div>
-                    </Form>    
+                    </Form>
                 </div>
                 <div style="clear:both"></div>
                 <div class="right_bottom">
@@ -141,12 +141,12 @@
                     <Table border stripe :columns="theone?columnst:columnstd" :data="theone?tableDatat:tableDatatd"></Table>
                 </div>
                 <div class="next_box" v-if="theone">
-                    <Page transfer :total="totaldata" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata" show-elevator show-total
-                        show-sizer></Page>
+                    <Page transfer :total="totaldata" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata"
+                        show-elevator show-total show-sizer></Page>
                 </div>
                 <div class="next_box" v-if="!theone">
-                    <Page transfer :total="total1data" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata" show-elevator show-total
-                        show-sizer></Page>
+                    <Page transfer :total="total1data" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata"
+                        show-elevator show-total show-sizer></Page>
                 </div>
                 <div class="footer">
                     <span>{{date_se}}</span>
@@ -158,7 +158,7 @@
 
                     <span>交易利润￥{{alldata.totalProfit}}</span>
                     <span style="color: #ff0000;">分成金额￥{{alldata.totalSharing}}</span>
-                    <Button style="border-radius:0;">导出为excel</Button>
+                    <Button style="border-radius:0;" @click="exportfeil">导出为excel</Button>
                 </div>
 
             </div>
@@ -181,10 +181,11 @@
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
     import store from '../store';
+
     import {
         GetTradeInfo
     } from '@/api/api';
-    import axios from 'axios';
+    import axios from '@/libs/axios';
     export default {
         components: {
             shrinkableMenu,
@@ -197,13 +198,13 @@
         },
         data() {
             return {
-                adate:'',
-                bdate:'',
-                date_se:'',
-                onchans:'',
-                onchane:'',
+                adate: '',
+                bdate: '',
+                date_se: '',
+                onchans: '',
+                onchane: '',
                 alldata: {
-                    
+
                     itemTotalCount: 4,
                     userTotalCount: 4,
                     totalAmount: 28758,
@@ -249,7 +250,7 @@
                             h(
                                 "span", {
                                     style: {
-                                        textAlign:"center"
+                                        textAlign: "center"
                                     }
                                 },
                                 text
@@ -257,12 +258,12 @@
                             h(
                                 "img", {
                                     style: {
-                                       float:"right",
-                                       width:"50px"
+                                        float: "right",
+                                        width: "50px"
                                     },
-                                    attrs:{
-                                        'src':url
-                                    }  
+                                    attrs: {
+                                        'src': url
+                                    }
                                 }
                             )
                         ]);
@@ -312,7 +313,8 @@
                         "color": "red"
                     }
                 }],
-                dateDA: ''
+                dateDA: '',
+                gurl: "http://localhost:5001"
             };
         },
         computed: {
@@ -344,12 +346,12 @@
         methods: {
             changePage(e) {
                 // console.log(e)
-                this.currentdata=e
+                this.currentdata = e
                 this.getlist()
             },
-            changePagesize(e){
+            changePagesize(e) {
                 // console.log(e)
-                this.pagesizedata=e
+                this.pagesizedata = e
                 this.getlist()
             },
             init() {
@@ -410,7 +412,7 @@
             changetheone(e) {
                 this.theone = e
             },
-            
+
             getdate() {
                 let obj = new Date()
                 let aa = obj.getFullYear() + "." + (obj.getMonth() + 1) + "." + obj.getDate()
@@ -422,7 +424,7 @@
                 this.startDate = aa
                 this.endDate = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
                 this.onchans = aa
-                this.onchane =dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
+                this.onchane = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
             },
             getlist() {
                 let aa = {
@@ -434,21 +436,22 @@
                     endDate: this.endDate
                 }
                 // console.log(aa)
-                let url = "http://localhost:5001"
+
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-                axios.get(url+"/api/Statistics/GetTradeInfo", {
+                axios.get(this.gurl + "/api/Statistics/GetTradeInfo", {
                     params: aa
                 }).then((res) => {
-                    console.log(res.data.data.orders.data)
+                    console.log(res)
+                    // console.log(res.data.data.orders.data)
                     if (res.data.success) {
-                        // console.log(res.data.orders)
+                        console.log(res)
                         this.alldata = res.data.data
                         this.tableDatat = res.data.data.orders.data
                         this.pagesizedata = res.data.data.orders.pageSize
-                        this.totaldata=res.data.data.orders.totalItems
-                        this.currentdata=res.data.data.orders.pageNumber
-                        this.date_se=this.startDate+"-"+this.endDate
+                        this.totaldata = res.data.data.orders.totalItems
+                        this.currentdata = res.data.data.orders.pageNumber
+                        this.date_se = this.startDate + "-" + this.endDate
                     } else {
                         this.$Message.error(res.data.message)
                     }
@@ -458,16 +461,53 @@
                 //     console.log(res)
                 // })
             },
-            onechanges(e){
-                this.onchans=e
+            onechanges(e) {
+                this.onchans = e
             },
-            onechangee(e){
-                this.onchane=e
+            onechangee(e) {
+                this.onchane = e
             },
-            changedatelist(){
+            changedatelist() {
                 this.startDate = this.onchans
                 this.endDate = this.onchane
                 this.getlist()
+            },
+            exportfeil() {
+                let aa = {
+                    startDate: this.startDate,
+                    endDate: this.endDate
+                }
+                axios.get(this.gurl + "/api/Statistics/ExportTradeInfo", {
+                    params: aa
+                }).then((res) => {
+                    this.download(res)
+                })
+                /*let durl=`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`
+                
+                $.ajax({
+                    url:`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`,
+                    type:"GET",
+                    xhrFields:{
+                        withCredentials:true,
+                        'Access-Control-Allow-Origin':"*"
+                    }
+                })*/
+
+
+            },
+            // 下载文件
+            download(data) {
+                if (!data) {
+                    return
+                }
+                let url = window.URL.createObjectURL(new Blob([data]))
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('download', 'excel.xlsx')
+
+                document.body.appendChild(link)
+                link.click()
             }
         },
         watch: {
