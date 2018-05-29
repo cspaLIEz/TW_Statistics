@@ -26,14 +26,14 @@
                 </div>
                 <div class="form-con">
                     <div class="form-con-header">
-                        贪玩岛后台管理系统
+                        贪玩岛统计数据
                     </div>
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
                             <input type="text" class="user-name" v-model="form.userName" placeholder="用户名">
                         </FormItem>
                         <FormItem prop="password">
-                            <input type="text" class="user-password" v-model="form.password" placeholder="用户密码">
+                            <input type="password" class="user-password" v-model="form.password" placeholder="用户密码">
                         </FormItem>
                         <FormItem style="text-align:center">
                             <Button @click="handleSubmit" type="primary" size="large" class="sub-btn">登录</Button>
@@ -149,7 +149,7 @@ export default {
                         this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                         Cookies.set('access', 0);
                         this.$router.push({
-                                name: 'global_switch'
+                                name: 'home_index'
                             });    
                     // }.bind(this));
                 // }
