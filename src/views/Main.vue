@@ -13,45 +13,46 @@
                 :menu-list="menuList">
                 
             </shrinkable-menu> -->
-            <div >
+            <div>
                 <div slot="top" class="logo-con">
-                        贪玩岛
+                    贪玩岛
                 </div>
                 <div class="main_lbox">
                     <div class="box_top">
-                        <span class="lspan">今天</span><span class="rspan">{{dateDA}}</span>
+                        <span class="lspan">今天</span>
+                        <span class="rspan">{{dateDA}}</span>
                     </div>
                     <p class="two_p">本月交易数据</p>
                     <ul>
                         <li>
                             <p class="left_p">成交件数</p>
-                            <p class="right_p">{{ldata}}件</p>
+                            <p class="right_p">{{alldata.itemTotalCount}}件</p>
                         </li>
                         <li>
                             <p class="left_p">交易人数</p>
-                            <p class="right_p">{{ldata}}人</p>
+                            <p class="right_p">{{alldata.userTotalCount}}人</p>
                         </li>
                         <li>
                             <p class="left_p">交易额</p>
-                            <p class="right_p">￥{{ldata}}</p>
+                            <p class="right_p">￥{{alldata.totalAmount}}</p>
                         </li>
                         <li>
                             <p class="left_p">市场价</p>
-                            <p class="right_p">￥{{ldata}}</p>
+                            <p class="right_p">￥{{alldata.totalCost}}</p>
                         </li>
                         <li>
                             <p class="left_p">交易利润</p>
-                            <p class="right_p">￥{{ldata}}</p>
+                            <p class="right_p">￥{{alldata.totalProfit}}</p>
                         </li>
                         <div class="bottom_l">
                             <p class="left_p">分成金额</p>
-                            <p class="right_p">￥{{ldata}}</p>
-                        </div>   
+                            <p class="right_p">￥{{alldata.totalSharing}}</p>
+                        </div>
                     </ul>
-                    
+
                 </div>
             </div>
-            
+
 
         </div>
         <div class="main-header-con" style="paddingLeft:320px">
@@ -72,7 +73,7 @@
                     <lock-screen></lock-screen>
                     <!-- <message-tip v-model="mesCount"></message-tip> -->
                     <theme-switch></theme-switch>
-                    
+
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -96,59 +97,70 @@
         <div class="single-page-con" style="left:320px">
             <div class="right_box">
                 <div class="right_top">
-                        <Form :label-width="80">
-                        <div class="floatL">  
-                            <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
-                            <Button class="month_a"  :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
-                        </div>
+
+                    <div class="floatL">
+                        <Button class="detali_a" :style="theone?'background-color: #1a71a8;':''" @click="changetheone(true)">交易明细</Button>
+                        <Button class="month_a" :style="!theone?'background-color: #1a71a8;':''" @click="changetheone(false)">月度统计</Button>
+                    </div>
+                    <Form :label-width="80">
                         <div v-if="theone">
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="起始时间">
-                                    <DatePicker type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                    <DatePicker v-model="adate" format="yyyy.MM.dd" @on-change="onechanges" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="终止时间">
-                                    <DatePicker type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
+                                    <DatePicker v-model="bdate" format="yyyy.MM.dd" @on-change="onechangee" type="date" placeholder="选择日期" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
+                            <Button type="error" @click="changedatelist" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+
                         </div>
+                    </Form>
+                    <Form :label-width="80">
                         <div v-if="!theone">
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="起始月份">
                                     <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                            <div class="floatL"  style="margin-top:10px">
+                            <div class="floatL" style="margin-top:10px">
                                 <FormItem label="终止月份">
                                     <DatePicker type="month" placeholder="选择月份" style="width: 220px"></DatePicker>
                                 </FormItem>
                             </div>
-                            
+                            <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+
                         </div>
-                    </Form>    
-                    <Button type="error" style="border-radius:0;margin-top:10px;background-color: #de4747;">确定</Button>
+                    </Form>
                 </div>
                 <div style="clear:both"></div>
                 <div class="right_bottom">
-                    <Table stripe :columns="theone?columnst:columnstd" :data="theone?tableDatat:tableDatatd"></Table>
+
+                    <Table border stripe :columns="theone?columnst:columnstd" :data="theone?tableDatat:tableDatatd"></Table>
                 </div>
-                <div class="next_box">
-                    <Page :total="totaldata" :current="currentdata" @on-change="changePage" :page-size="pagesizedata" show-elevator show-total show-sizer></Page>
+                <div class="next_box" v-if="theone">
+                    <Page transfer :total="totaldata" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata"
+                        show-elevator show-total show-sizer></Page>
+                </div>
+                <div class="next_box" v-if="!theone">
+                    <Page transfer :total="total1data" :current="currentdata" @on-change="changePage" @on-page-size-change="changePagesize" :page-size="pagesizedata"
+                        show-elevator show-total show-sizer></Page>
                 </div>
                 <div class="footer">
-                    <span>2018.5.3-2018.6.3</span>
-                    <span>数据合计：成交件数{{ldata}}件</span>
-                    <span>交易人数{{ldata}}人</span>
-                    <span>交易额￥{{ldata}}</span>
+                    <span>{{date_se}}</span>
+                    <span>数据合计：成交件数{{alldata.itemTotalCount}}件</span>
+                    <span>交易人数{{alldata.userTotalCount}}人</span>
+                    <span>交易额￥{{alldata.totalAmount}}</span>
 
-                    <span>采购市场价￥{{ldata}}</span>
+                    <span>采购市场价￥{{alldata.totalCost}}</span>
 
-                    <span>交易利润￥{{ldata}}</span>
-                    <span style="color: #ff0000;">分成金额￥{{ldata}}</span>
-                    <Button style="border-radius:0;">导出为excel</Button>
+                    <span>交易利润￥{{alldata.totalProfit}}</span>
+                    <span style="color: #ff0000;">分成金额￥{{alldata.totalSharing}}</span>
+                    <Button style="border-radius:0;" @click="exportfeil">导出为excel</Button>
                 </div>
-                
+
             </div>
             <!-- <div class="single-page">
                 <keep-alive :include="cachePage">
@@ -168,7 +180,12 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
-    
+    import store from '../store';
+
+    import {
+        GetTradeInfo
+    } from '@/api/api';
+    import axios from '@/libs/axios';
     export default {
         components: {
             shrinkableMenu,
@@ -179,128 +196,165 @@
             messageTip,
             themeSwitch
         },
-        data () {
+        data() {
             return {
-                totaldata:50,
-                currentdata:1,
-                pagesizedata:20,
-                ldata:'100',
+                adate: '',
+                bdate: '',
+                date_se: '',
+                onchans: '',
+                onchane: '',
+                alldata: {
+
+                    itemTotalCount: 4,
+                    userTotalCount: 4,
+                    totalAmount: 28758,
+                    totalCost: 0,
+                    totalProfit: 28758,
+                    totalSharing: 0,
+                    orders: {
+                        data: [{
+                            ipAddress: "",
+                            phoneNumber: "",
+                            imgUrl: "",
+                            marketName: "",
+                            completedAt: "",
+                            bidPrice: '',
+                            marketPrice: '',
+                            profit: 0,
+                            sharing: 0
+                        }],
+                        totalItems: 4,
+                        pageNumber: 1,
+                        pageSize: 20
+                    }
+                },
+                totaldata: 50,
+                currentdata: 1,
+                pagesizedata: 20,
+                ldata: '100',
                 shrink: false,
                 userName: '',
                 isFullScreen: false,
                 openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
-                theone:true,
-                columnst:[{
-                    title:"用户手机号",
-                    key:'phone'
-                },{
-                    title:"饰品",
-                    key:'phone'
-                },{
-                    title:"成交时间",
-                    key:'phone'
-                },{
-                    title:"成交金额",
-                    key:'phone'
-                },{
-                    title:"市场价",
-                    key:'phone'
-                },{
-                    title:"交易利润",
-                    key:'phone'
-                },{
-                    title:"分成金额",
-                    key:'phone'
-                },{
-                    title:"用户ID",
-                    key:'phone'
+                theone: true,
+                columnst: [{
+                    title: "用户手机号",
+                    key: 'phoneNumber'
+                }, {
+                    title: "饰品",
+                    key: 'imgUrl',
+                    render: (h, params) => {
+                        const text = params.row.marketName
+                        const url = params.row.imgUrl
+                        return h("div", [
+                            h(
+                                "span", {
+                                    style: {
+                                        textAlign: "center"
+                                    }
+                                },
+                                text
+                            ),
+                            h(
+                                "img", {
+                                    style: {
+                                        float: "right",
+                                        width: "50px"
+                                    },
+                                    attrs: {
+                                        'src': url
+                                    }
+                                }
+                            )
+                        ]);
+                    }
+                }, {
+                    title: "成交时间",
+                    key: 'completedAt'
+                }, {
+                    title: "成交金额",
+                    key: 'bidPrice'
+                }, {
+                    title: "采购市场价",
+                    key: 'marketPrice'
+                }, {
+                    title: "交易利润",
+                    key: 'profit'
+                }, {
+                    title: "分成金额",
+                    key: 'sharing'
+                }, {
+                    title: "用户Ip",
+                    key: 'ipAddress'
                 }],
-                tableDatat:[{
-                    phone:1
-                },{
-                    phone:2
-                },{
-                    phone:3
-                },{
-                    phone:1
-                },{
-                    phone:1
-                },{
-                    phone:2
-                },{
-                    phone:3
-                },{
-                    phone:1
+                tableDatat: [],
+                tableDatatd: [{
+                    phone: 2
                 }],
-                tableDatatd:[{
-                    phone:28
-                },{
-                    phone:27
-                },{
-                    phone:36
-                },{
-                    phone:21
-                },{
-                    phone:22
-                },{
-                    phone:24
-                },{
-                    phone:25
-                },],
-                columnstd:[{
-                    title:"月份",
-                    key:'phone'
-                },{
-                    title:"成交件数",
-                    key:'phone'
-                },{
-                    title:"交易人数",
-                    key:'phone'
-                },{
-                    title:"交易额",
-                    key:'phone'
-                },{
-                    title:"交易利润",
-                    key:'phone'
-                },{
-                    title:"分成金额",
-                    key:'phone',
-                    style:{"color":"red"}
+                columnstd: [{
+                    title: "月份",
+                    key: 'phone'
+                }, {
+                    title: "成交件数",
+                    key: 'phone'
+                }, {
+                    title: "交易人数",
+                    key: 'phone'
+                }, {
+                    title: "交易额",
+                    key: 'phone'
+                }, {
+                    title: "交易利润",
+                    key: 'phone'
+                }, {
+                    title: "分成金额",
+                    key: 'phone',
+                    style: {
+                        "color": "red"
+                    }
                 }],
-                dateDA:''
+                dateDA: '',
+                gurl: "http://localhost:5001"
             };
         },
         computed: {
-            menuList () {
+            menuList() {
                 return this.$store.state.app.menuList;
             },
-            pageTagsList () {
+            pageTagsList() {
                 return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象
             },
-            currentPath () {
+            currentPath() {
                 return this.$store.state.app.currentPath; // 当前面包屑数组
             },
-            avatorPath () {
+            avatorPath() {
                 return localStorage.avatorImgPath;
             },
-            cachePage () {
+            cachePage() {
                 return this.$store.state.app.cachePage;
             },
-            lang () {
+            lang() {
                 return this.$store.state.app.lang;
             },
-            menuTheme () {
+            menuTheme() {
                 return this.$store.state.app.menuTheme;
             },
-            mesCount () {
+            mesCount() {
                 return this.$store.state.app.messageCount;
             }
         },
         methods: {
-            changePage(){
-
+            changePage(e) {
+                // console.log(e)
+                this.currentdata = e
+                this.getlist()
             },
-            init () {
+            changePagesize(e) {
+                // console.log(e)
+                this.pagesizedata = e
+                this.getlist()
+            },
+            init() {
                 let pathArr = util.setCurrentPath(this, this.$route.name);
                 this.$store.commit('updateMenulist');
                 if (pathArr.length >= 2) {
@@ -313,10 +367,10 @@
                 this.checkTag(this.$route.name);
                 this.$store.commit('setMessageCount', 3);
             },
-            toggleClick () {
+            toggleClick() {
                 this.shrink = !this.shrink;
             },
-            handleClickUserDropdown (name) {
+            handleClickUserDropdown(name) {
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
                     this.$router.push({
@@ -331,7 +385,7 @@
                     });
                 }
             },
-            checkTag (name) {
+            checkTag(name) {
                 let openpageHasTag = this.pageTagsList.some(item => {
                     if (item.name === name) {
                         return true;
@@ -341,10 +395,10 @@
                     util.openNewPage(this, name, this.$route.params || {}, this.$route.query || {});
                 }
             },
-            handleSubmenuChange (val) {
+            handleSubmenuChange(val) {
                 // console.log(val)
             },
-            beforePush (name) {
+            beforePush(name) {
                 // if (name === 'accesstest_index') {
                 //     return false;
                 // } else {
@@ -352,16 +406,108 @@
                 // }
                 return true;
             },
-            fullscreenChange (isFullScreen) {
+            fullscreenChange(isFullScreen) {
                 // console.log(isFullScreen);
             },
-            changetheone(e){
-                this.theone=e
+            changetheone(e) {
+                this.theone = e
             },
-            getdate(){
-                let obj=new Date()
-            this.dateDA=obj.getFullYear()+"."+(obj.getMonth()+1)+"."+obj.getDate()
+
+            getdate() {
+                let obj = new Date()
+                let aa = obj.getFullYear() + "." + (obj.getMonth() + 1) + "." + obj.getDate()
+                let dd = new Date()
+                dd.setDate(obj.getDate() + 1)
+                this.dateDA = aa
+                this.adate = aa
+                this.bdate = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
+                this.startDate = aa
+                this.endDate = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
+                this.onchans = aa
+                this.onchane = dd.getFullYear() + "." + (dd.getMonth() + 1) + "." + dd.getDate()
+            },
+            getlist() {
+                let aa = {
+                    pageSize: this.pagesizedata,
+                    pageIndex: this.currentdata,
+                    // endDate: "2018.5.24",
+                    // startDate: "2018.5.22",
+                    startDate: this.startDate,
+                    endDate: this.endDate
+                }
+                // console.log(aa)
+
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+                axios.get(this.gurl + "/api/Statistics/GetTradeInfo", {
+                    params: aa
+                }).then((res) => {
+                    console.log(res)
+                    // console.log(res.data.data.orders.data)
+                    if (res.data.success) {
+                        console.log(res)
+                        this.alldata = res.data.data
+                        this.tableDatat = res.data.data.orders.data
+                        this.pagesizedata = res.data.data.orders.pageSize
+                        this.totaldata = res.data.data.orders.totalItems
+                        this.currentdata = res.data.data.orders.pageNumber
+                        this.date_se = this.startDate + "-" + this.endDate
+                    } else {
+                        this.$Message.error(res.data.message)
+                    }
+                })
+                // GetTradeInfo(aa).then(res => res.json())
+                // .then((res) => {
+                //     console.log(res)
+                // })
+            },
+            onechanges(e) {
+                this.onchans = e
+            },
+            onechangee(e) {
+                this.onchane = e
+            },
+            changedatelist() {
+                this.startDate = this.onchans
+                this.endDate = this.onchane
+                this.getlist()
+            },
+            exportfeil() {
+                let aa = {
+                    startDate: this.startDate,
+                    endDate: this.endDate
+                }
+                axios.get(this.gurl + "/api/Statistics/ExportTradeInfo", {
+                    params: aa
+                }).then((res) => {
+                    this.download(res)
+                })
+                /*let durl=`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`
                 
+                $.ajax({
+                    url:`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`,
+                    type:"GET",
+                    xhrFields:{
+                        withCredentials:true,
+                        'Access-Control-Allow-Origin':"*"
+                    }
+                })*/
+
+
+            },
+            // 下载文件
+            download(data) {
+                if (!data) {
+                    return
+                }
+                let url = window.URL.createObjectURL(new Blob([data]))
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('download', 'excel.xlsx')
+
+                document.body.appendChild(link)
+                link.click()
             }
         },
         watch: {
@@ -374,26 +520,28 @@
                 this.checkTag(to.name);
                 localStorage.currentPageName = to.name;
             },
-            lang () {
+            lang() {
                 util.setCurrentPath(this, this.$route.name); // 在切换语言时用于刷新面包屑
             }
         },
-        beforeCreate(){
-            if(Cookies.get('user')){
+        beforeCreate() {
+            if (Cookies.get('user')) {
                 this.$store.commit('user/login', {
-                    user:Cookies.get('user'),
-                    userId:Cookies.get('userId')
+                    user: Cookies.get('user'),
+                    userId: Cookies.get('userId')
                 });
             }
         },
-        mounted () {
+        mounted() {
             this.init();
-            
+
         },
-        created () {
+        created() {
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
             this.getdate()
+            this.getlist()
+            // console.log(localStorage.getItem('token'))
         }
     };
 </script>
