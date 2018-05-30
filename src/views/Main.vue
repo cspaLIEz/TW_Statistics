@@ -314,7 +314,8 @@
                     }
                 }],
                 dateDA: '',
-                gurl: "http://localhost:5001"
+                gurl: "http://localhost:5001",
+
             };
         },
         computed: {
@@ -345,12 +346,10 @@
         },
         methods: {
             changePage(e) {
-                // console.log(e)
                 this.currentdata = e
                 this.getlist()
             },
             changePagesize(e) {
-                // console.log(e)
                 this.pagesizedata = e
                 this.getlist()
             },
@@ -396,7 +395,6 @@
                 }
             },
             handleSubmenuChange(val) {
-                // console.log(val)
             },
             beforePush(name) {
                 // if (name === 'accesstest_index') {
@@ -407,7 +405,6 @@
                 return true;
             },
             fullscreenChange(isFullScreen) {
-                // console.log(isFullScreen);
             },
             changetheone(e) {
                 this.theone = e
@@ -430,22 +427,16 @@
                 let aa = {
                     pageSize: this.pagesizedata,
                     pageIndex: this.currentdata,
-                    // endDate: "2018.5.24",
-                    // startDate: "2018.5.22",
                     startDate: this.startDate,
                     endDate: this.endDate
                 }
-                // console.log(aa)
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+                axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
                 axios.get(this.gurl + "/api/Statistics/GetTradeInfo", {
                     params: aa
                 }).then((res) => {
-                    console.log(res)
-                    // console.log(res.data.data.orders.data)
                     if (res.data.success) {
-                        console.log(res)
                         this.alldata = res.data.data
                         this.tableDatat = res.data.data.orders.data
                         this.pagesizedata = res.data.data.orders.pageSize
@@ -458,7 +449,6 @@
                 })
                 // GetTradeInfo(aa).then(res => res.json())
                 // .then((res) => {
-                //     console.log(res)
                 // })
             },
             onechanges(e) {
@@ -477,21 +467,15 @@
                     startDate: this.startDate,
                     endDate: this.endDate
                 }
+                // axios.defaults.headers.post['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 axios.get(this.gurl + "/api/Statistics/ExportTradeInfo", {
-                    params: aa
+                    params: aa,
+                    responseType: 'blob'
+                },
+                {
                 }).then((res) => {
-                    this.download(res)
+                    this.download(res.data)
                 })
-                /*let durl=`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`
-                
-                $.ajax({
-                    url:`${this.gurl}/api/Statistics/ExportTradeInfo?startDate=${this.startDate}&endDate=${this.endDate}`,
-                    type:"GET",
-                    xhrFields:{
-                        withCredentials:true,
-                        'Access-Control-Allow-Origin':"*"
-                    }
-                })*/
 
 
             },
@@ -504,8 +488,7 @@
                 let link = document.createElement('a')
                 link.style.display = 'none'
                 link.href = url
-                link.setAttribute('download', 'excel.xlsx')
-
+                link.setAttribute('download', this.startDate+"-"+this.endDate+".xlsx")
                 document.body.appendChild(link)
                 link.click()
             }
@@ -541,7 +524,6 @@
             this.$store.commit('setOpenedList');
             this.getdate()
             this.getlist()
-            // console.log(localStorage.getItem('token'))
         }
     };
 </script>

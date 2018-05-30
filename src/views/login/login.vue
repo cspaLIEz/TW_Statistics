@@ -26,11 +26,7 @@
                 </div>
                 <div class="form-con">
                     <div class="form-con-header">
-<<<<<<< HEAD
-                        贪玩岛统计数据
-=======
                         贪玩岛统计后台
->>>>>>> 8214968ac0f07cb13790c7e5cb439190cfe3546d
                     </div>
                     <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
@@ -160,18 +156,11 @@ export default {
                         this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                         Cookies.set('access', 0);
                         this.$router.push({
-<<<<<<< HEAD
-                                name: 'home_index'
-                            });    
-                    // }.bind(this));
-                // }
-=======
                                 name: 'global_switch'
                             });*/
 
                     }.bind(this));
                 }
->>>>>>> 8214968ac0f07cb13790c7e5cb439190cfe3546d
             });
         }
     }
