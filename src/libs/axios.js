@@ -4,11 +4,11 @@ import queryString from 'querystring'
 import store from '../store';
 
 const ajaxUrl = env === 'development'
-? 'http://localhost:5001'
+? 'http://netbarapi.tanwandao.com'
 : env === 'production'
-    ? 'http://localhost:5001'
+    ? 'http://netbarapi.tanwandao.com'
     : 'https://debug.url.com';
-
+//https://netbarapi.tanwandao.com
 let options = {
   baseURL:ajaxUrl,
   timeout: 30000,
