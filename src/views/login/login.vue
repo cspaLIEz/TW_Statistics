@@ -120,8 +120,9 @@ export default {
                     }
                     
                     Login(data).then(function(res){
-                        // console.log(res.access_token)
-                        // if(res.status===0){
+                        if(res.data.access_token==undefined){
+                            this.$Message.error(res.data.message);
+                        }else{
                             this.$Message.success("登录成功");
                             this.$store.commit('user/login', {
                                 user:this.form.userName,
@@ -130,21 +131,11 @@ export default {
                             });
                             localStorage.setItem('token',res.data.access_token)
                             
-                            // this.$store.commit("token",res.access_token)
-                            // Cookies.set('user', this.form.userName);
-                            // Cookies.set('password', this.form.password);
                             this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                            // if (this.form.userName === 'admin') {
-                            //     Cookies.set('access', 0);
-                            // } else {
-                            //     Cookies.set('access', 1);
-                            // }
                             this.$router.push({
                                 name: 'home_index'
                             });
-                        // } else {
-                        //     this.$Message.error("登录失败");
-                        // }
+                        }
 
 
                         /*this.$store.commit('user/login', {

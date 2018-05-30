@@ -15,7 +15,7 @@
             </shrinkable-menu> -->
             <div>
                 <div slot="top" class="logo-con">
-                    贪玩岛
+                    云更新
                 </div>
                 <div class="main_lbox">
                     <div class="box_top">
@@ -65,7 +65,7 @@
                 <div class="header-middle-con">
                     <div class="main-breadcrumb">
                         <!-- <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav> -->
-                        统计后台
+                        贪玩岛商场
                     </div>
                 </div>
                 <div class="header-avator-con">
@@ -198,6 +198,8 @@
         },
         data() {
             return {
+                // gurl: "http://localhost:5001",
+                gurl: "http://netbarapi.tanwandao.com",
                 adate: '',
                 bdate: '',
                 date_se: '',
@@ -314,7 +316,6 @@
                     }
                 }],
                 dateDA: '',
-                gurl: "http://localhost:5001",
 
             };
         },
